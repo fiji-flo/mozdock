@@ -1,0 +1,10 @@
+# source this file
+
+Xvfb :99 -ac -screen 0 1024x768x16 &
+x11vnc -rfbauth /home/user/vnc/passwd -xkb -noxrecord -noxfixes -noxdamage -ncache 10 -rfbport 5900 -display :99 &
+websockify --web /usr/share/novnc/ 8080 localhost:5900 &
+while ! curl localhost:8080; do
+  sleep 0.1 # wait for 1/10 of the second before check again
+done
+export DISPLAY=:99
+ratpoison &
